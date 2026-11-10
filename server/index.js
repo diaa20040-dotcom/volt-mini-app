@@ -35,12 +35,7 @@ app.use(express.static(path.join(root, 'public')));
 
 function requireUser(req, res) {
   const initData = req.headers['x-telegram-init'] || req.body?.initData;
-  const dev = req.headers['x-dev-user'];
-  if (dev && !BOT_TOKEN) {
-    const id = Number(dev) || DEMO_USER_ID;
-    return getOrCreateUser(id, { username: 'preview', first_name: 'Preview' });
-  }
-  if (BOT_TOKEN && initData && validateInitData(initData, BOT_TOKEN)) {
+  if (initData && BOT_TOKEN && validateInitData(initData, BOT_TOKEN)) {
     const u = parseUserFromInitData(initData);
     if (!u?.id) {
       res.status(401).json({ error: 'Invalid user' });
@@ -48,11 +43,13 @@ function requireUser(req, res) {
     }
     return getOrCreateUser(u.id, { username: u.username, first_name: u.first_name });
   }
-  if (!BOT_TOKEN) {
-    return getOrCreateUser(DEMO_USER_ID, { username: 'preview', first_name: 'Preview' });
+  if (initData && BOT_TOKEN) {
+    res.status(401).json({ error: 'Invalid initData' });
+    return null;
   }
-  res.status(401).json({ error: 'Invalid initData' });
-  return null;
+  const dev = req.headers['x-dev-user'];
+  const id = dev ? Number(dev) || DEMO_USER_ID : DEMO_USER_ID;
+  return getOrCreateUser(id, { username: 'preview', first_name: 'Preview' });
 }
 
 function publicUser(u) {
