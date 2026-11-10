@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>vølt</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <div id="captcha-overlay" class="overlay hidden">
+      <div class="card captcha-card">
+        <h2>Quick check</h2>
+        <p class="muted">Stop bots before mining starts.</p>
+        <p id="captcha-q" class="captcha-q"></p>
+        <input id="captcha-input" type="number" inputmode="numeric" placeholder="Answer" />
+        <button id="captcha-submit" class="btn primary">Continue</button>
+      </div>
+    </div>
+
+    <header class="top">
+      <span id="brand">vølt</span>
+      <div id="balance-pill" class="pill">0 vølt</div>
+    </header>
+
+    <main id="panels">
+      <section id="tab-mine" class="panel active">
+        <div class="mine-hero card">
+          <p class="label">Mining now</p>
+          <p id="mined-live" class="big-num mint">0.00</p>
+          <div class="status-row">
+            <span id="mining-dot" class="dot on"></span>
+            <span id="mining-label">Active</span>
+          </div>
+          <button id="claim-btn" class="btn primary wide">Claim</button>
+        </div>
+        <div class="stat-grid">
+          <div class="stat card"><span>Per hour</span><strong id="per-hour">~17</strong></div>
+          <div class="stat card"><span>Daily cap</span><strong>410</strong></div>
+          <div class="stat card"><span>Check-in today</span><strong id="checkin-reward">10+</strong></div>
+        </div>
+        <div class="level card">
+          <span>Player level</span>
+          <strong id="level">1</strong>
+        </div>
+      </section>
+
+      <section id="tab-tasks" class="panel">
+        <button id="checkin-btn" class="btn secondary wide">Daily check-in</button>
+        <h3 class="section-title">Tasks</h3>
+        <div id="tasks-list"></div>
+      </section>
+
+      <section id="tab-board" class="panel">
+        <h3 class="section-title">Leaderboard</h3>
+        <ul id="board-list" class="board"></ul>
+      </section>
+
+      <section id="tab-friends" class="panel">
+        <p class="muted">Invite friends: 50 vølt once, then 8% of their mining.</p>
+        <button id="share-btn" class="btn secondary wide">Share invite link</button>
+        <p id="ref-link" class="ref mono"></p>
+      </section>
+
+      <section id="tab-wallet" class="panel">
+        <p class="muted">10 vølt = 1 GRAM · min 1 GRAM · manual payout</p>
+        <label class="field">TON wallet</label>
+        <input id="wallet-input" class="input" placeholder="EQ…" />
+        <button id="save-wallet" class="btn secondary wide">Save wallet</button>
+        <label class="field">Withdraw (GRAM)</label>
+        <input id="withdraw-input" class="input" type="number" min="1" step="1" placeholder="1" />
+        <button id="withdraw-btn" class="btn primary wide">Request withdrawal</button>
+      </section>
+
+      <section id="tab-desk" class="panel admin-only hidden">
+        <h3 class="section-title">Desk</h3>
+        <div class="admin-block card">
+          <h4>Link task</h4>
+          <input id="lt-title" class="input" placeholder="Title" />
+          <input id="lt-url" class="input" placeholder="https://…" />
+          <input id="lt-reward" class="input" type="number" placeholder="Reward vølt" />
+          <label><input type="checkbox" id="lt-pin" /> Pin on top</label>
+          <button id="lt-save" class="btn primary wide">Add link task</button>
+        </div>
+        <div class="admin-block card">
+          <h4>User</h4>
+          <input id="adm-q" class="input" placeholder="@username or Telegram ID" />
+          <button id="adm-search" class="btn secondary">Search</button>
+          <p id="adm-info" class="muted"></p>
+          <input id="adm-points" class="input" type="number" placeholder="Points to add" />
+          <button id="adm-add" class="btn primary">Add points</button>
+          <div class="row">
+            <button id="adm-ban" class="btn danger">Ban</button>
+            <button id="adm-unban" class="btn secondary">Unban</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="nav">
+      <button data-tab="mine" class="nav-btn active">Mine</button>
+      <button data-tab="tasks" class="nav-btn">Tasks</button>
+      <button data-tab="board" class="nav-btn">Board</button>
+      <button data-tab="friends" class="nav-btn">Friends</button>
+      <button data-tab="wallet" class="nav-btn">Wallet</button>
+      <button data-tab="desk" class="nav-btn admin-only hidden">Desk</button>
+    </nav>
+
+    <footer class="foot muted">Built with BrainDaemon · Daemon Omega</footer>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+:root {
+  --bg: #0b1f24;
+  --card: #12343c;
+  --mint: #5ce1b9;
+  --mint-dim: #2a9d7a;
+  --text: #e8f4f1;
+  --muted: #8fb5ac;
+  --danger: #ff6b6b;
+  --tg-theme-bg-color: var(--bg);
+  --tg-theme-text-color: var(--text);
+  --tg-theme-button-color: var(--mint);
+  --tg-theme-button-text-color: #052018;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: radial-gradient(ellipse at top, #16424c 0%, var(--bg) 55%);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+#app { max-width: 480px; margin: 0 auto; padding: 12px 12px 88px; }
+
+.top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+#brand { font-weight: 800; font-size: 1.4rem; letter-spacing: 0.04em; color: var(--mint); }
+
+.pill {
+  background: rgba(92, 225, 185, 0.15);
+  border: 1px solid rgba(92, 225, 185, 0.35);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.card {
+  background: linear-gradient(165deg, rgba(18, 52, 60, 0.95), rgba(11, 31, 36, 0.95));
+  border: 1px solid rgba(92, 225, 185, 0.12);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.mine-hero { text-align: center; }
+.label { color: var(--muted); margin: 0 0 8px; font-size: 0.85rem; }
+.big-num { font-size: 2.4rem; font-weight: 800; margin: 0; }
+.mint { color: var(--mint); }
+.status-row { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 10px 0 16px; color: var(--muted); }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: #444; }
+.dot.on { background: var(--mint); box-shadow: 0 0 12px var(--mint); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat span { display: block; font-size: 0.7rem; color: var(--muted); }
+.stat strong { font-size: 1.1rem; }
+.level { display: flex; justify-content: space-between; align-items: center; }
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn.wide { width: 100%; }
+.primary { background: var(--mint); color: #052018; }
+.secondary { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.12); }
+.danger { background: var(--danger); color: #fff; }
+.row { display: flex; gap: 8px; margin-top: 8px; }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.nav {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  max-width: 480px; margin: 0 auto;
+  display: flex; gap: 4px;
+  background: rgba(11, 31, 36, 0.96);
+  border-top: 1px solid rgba(92, 225, 185, 0.15);
+  padding: 8px 6px env(safe-area-inset-bottom);
+  backdrop-filter: blur(10px);
+}
+.nav-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.68rem;
+  padding: 8px 2px;
+}
+.nav-btn.active { color: var(--mint); font-weight: 700; }
+
+.section-title { margin: 16px 0 8px; font-size: 0.95rem; color: var(--muted); }
+.task-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px; margin-bottom: 8px;
+  background: var(--card); border-radius: 12px;
+}
+.task-item.done { opacity: 0.55; }
+.muted { color: var(--muted); font-size: 0.85rem; }
+.mono { font-size: 0.75rem; word-break: break-all; }
+.input {
+  width: 100%; margin: 6px 0 10px;
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.25); color: var(--text);
+}
+.field { display: block; font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+
+.board { list-style: none; padding: 0; margin: 0; }
+.board li {
+  display: flex; justify-content: space-between;
+  padding: 10px 12px; margin-bottom: 6px;
+  background: var(--card); border-radius: 10px;
+}
+
+.foot { text-align: center; font-size: 0.65rem; margin-top: 20px; opacity: 0.7; }
+.hidden { display: none !important; }
+
+.overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(0,0,0,0.75);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.captcha-card { max-width: 320px; width: 100%; }
+.captcha-q { font-size: 1.5rem; font-weight: 800; color: var(--mint); }
