@@ -9,6 +9,10 @@ import {
   claimMining,
   checkinReward,
   todayUtc,
+  rankTitle,
+  spinPrize,
+  perHour,
+  BOOST_MS,
 } from './game.js';
 import { E, premiumLine } from './premiumEmoji.js';
 
@@ -62,7 +66,13 @@ function publicUser(u) {
     minedUnclaimed: Math.round(synced.mined_unclaimed * 100) / 100,
     miningActive: synced.mined_unclaimed > 0 && !synced.banned,
     level: synced.level,
+    rank: rankTitle(synced.level),
     streak: synced.streak,
+    perHour: perHour(synced),
+    boostActive: !!(synced.boost_until && synced.boost_until > Date.now()),
+    boostUntil: synced.boost_until || null,
+    canBoost: synced.last_boost_date !== todayUtc(),
+    canSpin: synced.last_spin_date !== todayUtc(),
     tonWallet: synced.ton_wallet,
     captchaPassed: !!synced.captcha_passed,
     banned: !!synced.banned,
@@ -79,7 +89,8 @@ function saveUser(user) {
     `UPDATE users SET balance = ?, mined_unclaimed = ?, mining_started_at = ?,
      total_claimed = ?, level = ?, streak = ?, last_checkin_date = ?,
      ton_wallet = ?, captcha_passed = ?, banned = ?, referral_paid = ?,
-     username = ?, first_name = ? WHERE telegram_id = ?`
+     username = ?, first_name = ?, last_tick_at = ?, boost_until = ?,
+     last_boost_date = ?, last_spin_date = ? WHERE telegram_id = ?`
   ).run(
     user.balance,
     user.mined_unclaimed,
@@ -94,6 +105,10 @@ function saveUser(user) {
     user.referral_paid,
     user.username,
     user.first_name,
+    user.last_tick_at ?? null,
+    user.boost_until ?? null,
+    user.last_boost_date ?? null,
+    user.last_spin_date ?? null,
     user.telegram_id
   );
 }
@@ -115,6 +130,40 @@ app.post('/api/claim', (req, res) => {
   saveUser(next);
   payReferralShare(next, claimed);
   res.json({ ...publicUser(next), claimed });
+});
+
+app.post('/api/boost', (req, res) => {
+  const user = requireUser(req, res);
+  if (!user) return;
+  if (user.banned) return res.status(403).json({ error: 'Banned' });
+  if (!user.captcha_passed) return res.status(403).json({ error: 'Complete captcha first' });
+  const today = todayUtc();
+  if (user.last_boost_date === today) {
+    return res.status(400).json({ error: 'Boost already used today' });
+  }
+  const now = Date.now();
+  const synced = syncMining(user, now);
+  synced.boost_until = now + BOOST_MS;
+  synced.last_boost_date = today;
+  saveUser(synced);
+  res.json(publicUser(syncMining(synced, now)));
+});
+
+app.post('/api/spin', (req, res) => {
+  const user = requireUser(req, res);
+  if (!user) return;
+  if (user.banned) return res.status(403).json({ error: 'Banned' });
+  if (!user.captcha_passed) return res.status(403).json({ error: 'Complete captcha first' });
+  const today = todayUtc();
+  if (user.last_spin_date === today) {
+    return res.status(400).json({ error: 'Spin already used today' });
+  }
+  const prize = spinPrize(Math.floor(Math.random() * 100));
+  const synced = syncMining(user);
+  synced.balance += prize;
+  synced.last_spin_date = today;
+  saveUser(synced);
+  res.json({ ...publicUser(synced), prize });
 });
 
 function payReferralShare(miner, claimed) {

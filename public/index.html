@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>vølt</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
@@ -26,23 +28,29 @@
 
     <main id="panels">
       <section id="tab-mine" class="panel active">
-        <div class="mine-hero card">
+        <div class="mine-hero card glow">
+          <div class="rank-row">
+            <span id="rank" class="rank">Spark</span>
+            <span id="streak-chip" class="chip">Streak 0</span>
+          </div>
           <p class="label">Mining now</p>
-          <p id="mined-live" class="big-num mint">0.00</p>
+          <p id="mined-live" class="big-num gold shine">0.00</p>
           <div class="status-row">
             <span id="mining-dot" class="dot on"></span>
             <span id="mining-label">Active</span>
+            <span id="boost-tag" class="chip hot hidden">2× surge</span>
           </div>
           <button id="claim-btn" class="btn primary wide">Claim</button>
+          <div class="action-row">
+            <button id="boost-btn" class="btn secondary">Surge 2×</button>
+            <button id="spin-btn" class="btn secondary">Lucky flash</button>
+          </div>
+          <p id="flash-note" class="muted flash-note"></p>
         </div>
         <div class="stat-grid">
-          <div class="stat card"><span>Per hour</span><strong id="per-hour">~17</strong></div>
-          <div class="stat card"><span>Daily cap</span><strong>410</strong></div>
-          <div class="stat card"><span>Check-in today</span><strong id="checkin-reward">10+</strong></div>
-        </div>
-        <div class="level card">
-          <span>Player level</span>
-          <strong id="level">1</strong>
+          <div class="stat card"><span>Per hour</span><strong id="per-hour">17</strong></div>
+          <div class="stat card"><span>Daily pace</span><strong>410</strong></div>
+          <div class="stat card"><span>Level</span><strong id="level">1</strong></div>
         </div>
       </section>
 

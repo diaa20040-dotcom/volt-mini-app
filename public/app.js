@@ -35,12 +35,22 @@ function renderMe() {
   document.getElementById('balance-pill').textContent = `${me.balance.toFixed(1)} vølt`;
   document.getElementById('mined-live').textContent = me.minedUnclaimed.toFixed(2);
   document.getElementById('level').textContent = me.level;
+  document.getElementById('rank').textContent = me.rank || 'Spark';
+  document.getElementById('streak-chip').textContent = `Streak ${me.streak || 0}`;
+  document.getElementById('per-hour').textContent = String(me.perHour || 17);
+  document.getElementById('boost-tag').classList.toggle('hidden', !me.boostActive);
+  document.getElementById('boost-btn').disabled = !me.canBoost;
+  document.getElementById('boost-btn').textContent = me.canBoost ? 'Surge 2×' : 'Surge used';
+  document.getElementById('spin-btn').disabled = !me.canSpin;
+  document.getElementById('spin-btn').textContent = me.canSpin ? 'Lucky flash' : 'Flash used';
   document.getElementById('mining-dot').classList.toggle('on', me.miningActive && !me.banned);
   document.getElementById('mining-label').textContent = me.banned
     ? 'Banned'
-    : me.miningActive
-      ? 'Active'
-      : 'Paused';
+    : me.boostActive
+      ? 'Surging'
+      : me.miningActive
+        ? 'Active'
+        : 'Paused';
   document.getElementById('wallet-input').value = me.tonWallet || '';
   if (me.isAdmin) {
     document.querySelectorAll('.admin-only').forEach((el) => el.classList.remove('hidden'));
@@ -73,6 +83,36 @@ document.getElementById('captcha-submit').addEventListener('click', async () => 
     tg?.HapticFeedback?.notificationOccurred('success');
   } catch (e) {
     tg?.showAlert?.(e.message);
+  }
+});
+
+function note(message) {
+  const el = document.getElementById('flash-note');
+  if (el) el.textContent = message;
+  if (tg?.showPopup) tg.showPopup({ message });
+  else if (tg?.showAlert) tg.showAlert(message);
+}
+
+document.getElementById('boost-btn').addEventListener('click', async () => {
+  try {
+    me = await api('/api/boost', { method: 'POST', body: '{}' });
+    renderMe();
+    note('2× surge for 30 minutes');
+    tg?.HapticFeedback?.notificationOccurred('success');
+  } catch (e) {
+    note(e.message);
+  }
+});
+
+document.getElementById('spin-btn').addEventListener('click', async () => {
+  try {
+    const r = await api('/api/spin', { method: 'POST', body: '{}' });
+    me = r;
+    renderMe();
+    note(`Lucky flash +${r.prize} vølt`);
+    tg?.HapticFeedback?.notificationOccurred('success');
+  } catch (e) {
+    note(e.message);
   }
 });
 

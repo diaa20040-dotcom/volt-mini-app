@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { syncMining, claimMining, checkinReward } from '../server/game.js';
+import { syncMining, claimMining, checkinReward, rankTitle, spinPrize } from '../server/game.js';
 
 test('mining caps at 4 hours worth', () => {
   const now = Date.now();
@@ -36,6 +36,14 @@ test('claim resets mining timer', () => {
   };
   const { user: next, claimed } = claimMining(user, now);
   assert.ok(claimed >= 11 && claimed <= 13);
+  assert.equal(next.last_tick_at, now);
   assert.equal(next.mined_unclaimed, 0);
   assert.equal(next.mining_started_at, now);
+});
+
+test('ranks and spin prizes stay in range', () => {
+  assert.equal(rankTitle(1), 'Spark');
+  assert.equal(rankTitle(11), 'Crown');
+  assert.equal(spinPrize(0), 5);
+  assert.equal(spinPrize(99), 80);
 });

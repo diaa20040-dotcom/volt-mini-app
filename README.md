@@ -1,6 +1,6 @@
 # vølt — Telegram Mini App
 
-English mining mini app with tasks, leaderboard, wallet withdrawals (manual GRAM payout), captcha, SQLite storage, and admin **Desk** for link tasks, points, and ban/unban.
+English mining mini app with tasks, leaderboard, wallet withdrawals (manual GRAM payout), captcha, daily Surge (2× for 30 minutes), Lucky flash, rank titles, SQLite storage, and admin **Desk** for link tasks, points, and ban/unban.
 
 ## Run locally
 

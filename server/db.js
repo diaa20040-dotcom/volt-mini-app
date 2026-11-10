@@ -80,6 +80,16 @@ db.exec(`
   );
 `);
 
+const userCols = new Set(db.prepare('PRAGMA table_info(users)').all().map((c) => c.name));
+for (const [name, type] of [
+  ['last_tick_at', 'INTEGER'],
+  ['boost_until', 'INTEGER'],
+  ['last_boost_date', 'TEXT'],
+  ['last_spin_date', 'TEXT'],
+]) {
+  if (!userCols.has(name)) db.exec(`ALTER TABLE users ADD COLUMN ${name} ${type}`);
+}
+
 export function getOrCreateUser(telegramId, profile = {}) {
   const row = db.prepare('SELECT * FROM users WHERE telegram_id = ?').get(telegramId);
   if (row) {
